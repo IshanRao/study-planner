@@ -1,10 +1,11 @@
-import { Calendar, Clock, ListChecks, Settings } from "lucide-react";
+import { Focus, History, Target, Trophy } from "lucide-react";
+import Link from "next/link";
 
 const links = [
-  { label: "Overview", icon: Calendar },
-  { label: "Sessions", icon: Clock },
-  { label: "Subjects", icon: ListChecks },
-  { label: "Settings", icon: Settings },
+  { label: "Plan", icon: Target, href: "/plan" },
+  { label: "Focus", icon: Focus, href: "/focus" },
+  { label: "Reflect", icon: History, href: "/reflect" },
+  { label: "Reward", icon: Trophy, href: "/reward" },
 ] as const;
 
 export function Sidebar() {
@@ -17,14 +18,14 @@ export function Sidebar() {
         {links.map((item) => {
           const Icon = item.icon;
           return (
-            <button
+            <Link
               key={item.label}
-              type="button"
+              href={item.href}
               className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-slate-300 transition hover:bg-slate-800/80 hover:text-sky-200"
             >
               <Icon className="h-4 w-4 text-slate-400" />
               <span>{item.label}</span>
-            </button>
+            </Link>
           );
         })}
       </nav>
