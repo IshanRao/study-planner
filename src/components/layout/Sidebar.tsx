@@ -11,9 +11,12 @@ const links = [
 export function Sidebar() {
   return (
     <aside className="flex h-full flex-col border-r border-slate-800 bg-slate-950/95 text-slate-100">
-      <div className="px-4 pb-3 pt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-        Navigation
-      </div>
+      <Link
+        href="/"
+        className="px-4 pb-3 pt-4 text-xs font-semibold uppercase tracking-[0.2em] text-slate-500 hover:text-sky-300"
+      >
+        View Tasks
+      </Link>
       <nav className="flex-1 space-y-1 px-2 pb-4 text-sm">
         {links.map((item) => {
           const Icon = item.icon;
