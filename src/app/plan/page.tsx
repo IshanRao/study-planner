@@ -24,8 +24,9 @@ export default function PlanPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
     setValue,
+    setError,
     watch,
     trigger,
   } = useForm<PlanValues>({
@@ -68,10 +69,38 @@ export default function PlanPage() {
     setStepId(PLAN_STEPS[currentStepIndex + 1]!.id);
   };
 
-  const onFinalSubmit = (data: PlanValues) => {
-    window.alert(
-      `Plan saved (placeholder):\n\n${JSON.stringify(data, null, 2)}`
-    );
+  const onFinalSubmit = async (data: PlanValues) => {
+    const body = {
+      task: data.task,
+      mainGoal: data.mainGoal,
+      minorGoals: data.minorGoals.join("; "),
+      importance: data.importance,
+      urgency: data.urgency,
+    };
+    try {
+      const res = await fetch("http://localhost:8000/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        const detail = (err as { detail?: unknown }).detail;
+        const message =
+          typeof detail === "string"
+            ? detail
+            : detail
+              ? JSON.stringify(detail)
+              : `Failed to create task (${res.status})`;
+        setError("root", { type: "server", message });
+        return;
+      }
+    } catch (e) {
+      setError("root", {
+        type: "server",
+        message: e instanceof Error ? e.message : "Failed to create task",
+      });
+    }
   };
 
   return (
@@ -124,7 +153,18 @@ export default function PlanPage() {
             />
           )}
 
-          {stepId === "review" && <PlanReviewStep values={values} />}
+          {stepId === "review" && (
+            <PlanReviewStep
+              values={values}
+              isSubmitting={isSubmitting}
+              submitError={(() => {
+                const message = (errors as { root?: { message?: unknown } }).root
+                  ?.message;
+                if (!message) return undefined;
+                return typeof message === "string" ? message : JSON.stringify(message);
+              })()}
+            />
+          )}
 
           <PlanStepNav
             onBack={goBack}

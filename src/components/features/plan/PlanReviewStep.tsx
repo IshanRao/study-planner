@@ -1,13 +1,24 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Loader2 } from "lucide-react";
 import type { PlanValues } from "@/models/plan.models";
 
 interface PlanReviewStepProps {
   values: PlanValues;
+  isSubmitting?: boolean;
+  submitError?: string;
 }
 
-export function PlanReviewStep({ values }: PlanReviewStepProps) {
+export function PlanReviewStep({
+  values,
+  isSubmitting = false,
+  submitError,
+}: PlanReviewStepProps) {
   return (
     <div className="space-y-4">
+      {submitError && (
+        <p className="rounded-xl border border-rose-800/80 bg-rose-950/40 px-4 py-3 text-sm text-rose-300">
+          {String(submitError)}
+        </p>
+      )}
       <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4">
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
           Summary
@@ -48,10 +59,20 @@ export function PlanReviewStep({ values }: PlanReviewStepProps) {
 
       <button
         type="submit"
-        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-slate-950 shadow-md shadow-emerald-900/50 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+        disabled={isSubmitting}
+        className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-semibold text-slate-950 shadow-md shadow-emerald-900/50 transition hover:bg-emerald-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/70 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 disabled:opacity-70 disabled:pointer-events-none"
       >
-        <CheckCircle2 className="h-4 w-4" />
-        Save plan (placeholder)
+        {isSubmitting ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Saving…
+          </>
+        ) : (
+          <>
+            <CheckCircle2 className="h-4 w-4" />
+            Save plan
+          </>
+        )}
       </button>
     </div>
   );
