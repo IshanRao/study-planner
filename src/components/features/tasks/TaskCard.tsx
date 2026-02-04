@@ -1,10 +1,11 @@
-import type { FC } from "react";
+import { useState, type FC } from "react";
+import { TaskModal } from "./TaskModal";
 
 export interface Task {
   id?: number | string;
   task: string;
-  main_goal: string;
-  minor_goals: string;
+  mainGoal: string;
+  minorGoals: string;
   importance: string;
   urgency: string;
   created_at?: string;
@@ -41,33 +42,44 @@ function urgencyBadgeClasses(level: string): string {
 }
 
 export const TaskCard: FC<TaskCardProps> = ({ task }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <article className="group rounded-2xl border border-slate-800/80 bg-slate-950/80 p-4 shadow-md shadow-slate-950/60 transition hover:border-sky-500/70 hover:shadow-sky-900/60">
-      <header className="flex flex-col items-start justify-between gap-3">
-        <div>
-          <h2 className="mt-1 text-sm font-semibold text-slate-50">
-            {task.task}
-          </h2>
-        </div>
-        <div className="flex items-end gap-1 text-[11px]">
+    <>
+      <article
+        onClick={() => setIsModalOpen(true)}
+        className="group cursor-pointer rounded-2xl border border-slate-800/80 bg-slate-950/80 p-4 shadow-md shadow-slate-950/60 transition hover:border-sky-500/70 hover:shadow-sky-900/60"
+      >
+        <header className="flex flex-col items-start justify-between gap-3">
+          <div>
+            <h2 className="mt-1 text-sm font-semibold text-slate-50">
+              {task.task}
+            </h2>
+          </div>
+          <div className="flex items-end gap-1 text-[11px]">
           <span
             className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${importanceBadgeClasses(
               task.importance
             )}`}
           >
-            Importance: {task.importance}
-          </span>
+              Importance: {task.importance}
+            </span>
           <span
             className={`inline-flex items-center gap-1 rounded-full border px-2 py-0.5 font-medium ${urgencyBadgeClasses(
               task.urgency
             )}`}
           >
-            Urgency: {task.urgency}
-          </span>
-        </div>
-      </header>
-    </article>
+              Urgency: {task.urgency}
+            </span>
+          </div>
+        </header>
+      </article>
+
+      <TaskModal
+        task={task}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 };
-
