@@ -1,13 +1,14 @@
 import { useState, type FC } from "react";
 import { TaskModal } from "./TaskModal";
+import { importanceLevels, urgencyLevels } from "@/utils/validation";
 
 export interface Task {
   id?: number | string;
   task: string;
   mainGoal: string;
   minorGoals: string;
-  importance: string;
-  urgency: string;
+  importance: typeof importanceLevels[number];
+  urgency: typeof urgencyLevels[number];
   created_at?: string;
 }
 

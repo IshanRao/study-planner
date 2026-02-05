@@ -48,9 +48,6 @@ export default function Home() {
       <header className="flex items-baseline justify-between gap-2">
         <div>
           <h1 className="text-xl font-semibold text-slate-50">Tasks</h1>
-          <p className="text-sm text-slate-400">
-            All your planned study tasks fetched from the backend.
-          </p>
         </div>
       </header>
 
@@ -74,7 +71,7 @@ export default function Home() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {tasks.map((task) => (
             <TaskCard
-              key={task.id ?? `${task.task}-${task.main_goal}`}
+              key={task.id ?? `${task.task}-${task.mainGoal}`}
               task={task}
             />
           ))}
